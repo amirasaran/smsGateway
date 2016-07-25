@@ -1,0 +1,24 @@
+{
+    "name": "amirasaran/smsgateway",
+    "description": "Mobile Sms Gateway (smsgateway.me)",
+    "type": "library",
+    "keywords": ["mobile", "smsgateway", "smsgateway.me"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Amir Mohsen Asaran",
+            "email": "Admin@mihanmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "amirasaran\\smsgateway\\": ""
+        }
+    },
+    "repositories":[
+        {
+            "type": "git",
+            "url": "git@github.com:amirasaran/smsGateway.git"
+        }
+    ]
+}
