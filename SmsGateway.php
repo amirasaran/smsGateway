@@ -3,90 +3,97 @@
  * Created by PhpStorm.
  * User: amirmohsen
  * Date: 7/25/16
- * Time: 6:59 PM
+ * Time: 6:59 PM.
  */
-
 namespace amirasaran\smsgateway;
 
 class SmsGateway
 {
-
-    const BASE_URL = "https://smsgateway.me";
+    const BASE_URL = 'https://smsgateway.me';
     public $email;
     public $password;
 
     public function __construct($config = [])
     {
-        if(is_array($config))
-        {
-            foreach($config as $key => $value)
-            {
+        if (is_array($config)) {
+            foreach ($config as $key => $value) {
                 $this->$key = $value;
             }
         }
     }
 
-
-    public function createContact ($name,$number) {
-        return $this->makeRequest('/api/v3/contacts/create','POST',['name' => $name, 'number' => $number]);
-    }
-
-    public function getContacts ($page=1) {
-        return $this->makeRequest('/api/v3/contacts','GET',['page' => $page]);
-    }
-
-    public function getContact ($id) {
-        return $this->makeRequest('/api/v3/contacts/view/'.$id,'GET');
-    }
-
-
-    public function getDevices ($page=1)
+    public function createContact($name, $number)
     {
-        return $this->makeRequest('/api/v3/devices','GET',['page' => $page]);
+        return $this->makeRequest('/api/v3/contacts/create', 'POST', ['name' => $name, 'number' => $number]);
     }
 
-    public function getDevice ($id)
+    public function getContacts($page = 1)
     {
-        return $this->makeRequest('/api/v3/devices/view/'.$id,'GET');
+        return $this->makeRequest('/api/v3/contacts', 'GET', ['page' => $page]);
     }
 
-    public function getMessages($page=1)
+    public function getContact($id)
     {
-        return $this->makeRequest('/api/v3/messages','GET',['page' => $page]);
+        return $this->makeRequest('/api/v3/contacts/view/'.$id, 'GET');
+    }
+
+    public function getDevices($page = 1)
+    {
+        return $this->makeRequest('/api/v3/devices', 'GET', ['page' => $page]);
+    }
+
+    public function getDevice($id)
+    {
+        return $this->makeRequest('/api/v3/devices/view/'.$id, 'GET');
+    }
+
+    public function getMessages($page = 1)
+    {
+        return $this->makeRequest('/api/v3/messages', 'GET', ['page' => $page]);
     }
 
     public function getMessage($id)
     {
-        return $this->makeRequest('/api/v3/messages/view/'.$id,'GET');
+        return $this->makeRequest('/api/v3/messages/view/'.$id, 'GET');
     }
 
-    public function sendMessageToNumber($to, $message, $device, $options=[]) {
-        $query = array_merge(['number'=>$to, 'message'=>$message, 'device' => $device], $options);
-        return $this->makeRequest('/api/v3/messages/send','POST',$query);
+    public function sendMessageToNumber($to, $message, $device, $options = [])
+    {
+        $query = array_merge(['number' => $to, 'message' => $message, 'device' => $device], $options);
+
+        return $this->makeRequest('/api/v3/messages/send', 'POST', $query);
     }
 
-    public function sendMessageToManyNumbers ($to, $message, $device, $options=[]) {
-        $query = array_merge(['number'=>$to, 'message'=>$message, 'device' => $device], $options);
-        return $this->makeRequest('/api/v3/messages/send','POST', $query);
+    public function sendMessageToManyNumbers($to, $message, $device, $options = [])
+    {
+        $query = array_merge(['number' => $to, 'message' => $message, 'device' => $device], $options);
+
+        return $this->makeRequest('/api/v3/messages/send', 'POST', $query);
     }
 
-    public function sendMessageToContact ($to, $message, $device, $options=[]) {
-        $query = array_merge(['contact'=>$to, 'message'=>$message, 'device' => $device], $options);
-        return $this->makeRequest('/api/v3/messages/send','POST', $query);
+    public function sendMessageToContact($to, $message, $device, $options = [])
+    {
+        $query = array_merge(['contact' => $to, 'message' => $message, 'device' => $device], $options);
+
+        return $this->makeRequest('/api/v3/messages/send', 'POST', $query);
     }
 
-    public function sendMessageToManyContacts ($to, $message, $device, $options=[]) {
-        $query = array_merge(['contact'=>$to, 'message'=>$message, 'device' => $device], $options);
-        return $this->makeRequest('/api/v3/messages/send','POST', $query);
+    public function sendMessageToManyContacts($to, $message, $device, $options = [])
+    {
+        $query = array_merge(['contact' => $to, 'message' => $message, 'device' => $device], $options);
+
+        return $this->makeRequest('/api/v3/messages/send', 'POST', $query);
     }
 
-    public function sendManyMessages ($data) {
+    public function sendManyMessages($data)
+    {
         $query['data'] = $data;
-        return $this->makeRequest('/api/v3/messages/send','POST', $query);
+
+        return $this->makeRequest('/api/v3/messages/send', 'POST', $query);
     }
 
-    private function makeRequest ($url, $method, $fields=[]) {
-
+    private function makeRequest($url, $method, $fields = [])
+    {
         $fields['email'] = $this->email;
         $fields['password'] = $this->password;
 
@@ -97,33 +104,30 @@ class SmsGateway
 
         $ch = curl_init();
 
-        if($method == 'POST')
-        {
-            curl_setopt($ch,CURLOPT_POST, count($fields));
-            curl_setopt($ch,CURLOPT_POSTFIELDS, $fieldsString);
-        }
-        else
-        {
+        if ($method == 'POST') {
+            curl_setopt($ch, CURLOPT_POST, count($fields));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
+        } else {
             $url .= '?'.$fieldsString;
         }
 
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch, CURLOPT_HEADER , false);  // we want headers
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, false);  // we want headers
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        $result = curl_exec ($ch);
+        $result = curl_exec($ch);
 
-        $return['response'] = json_decode($result,true);
+        $return['response'] = json_decode($result, true);
 
-        if($return['response'] == false)
+        if ($return['response'] == false) {
             $return['response'] = $result;
+        }
 
         $return['status'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        curl_close ($ch);
+        curl_close($ch);
 
         return $return;
     }
-
 }
